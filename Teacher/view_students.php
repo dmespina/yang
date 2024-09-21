@@ -1,9 +1,22 @@
-<?php
+<?php 
 session_start();
-include '../DB_connection.php';
+if (isset($_SESSION['teacher_id']) && 
+    isset($_SESSION['role'])) {
 
-
-
+    if ($_SESSION['role'] == 'Teacher') {
+       include "../DB_connection.php";
+       include "data/class.php";
+       include "data/grade.php";
+       include "data/section.php";
+       include "data/teacher.php";
+       
+       $teacher_id = $_SESSION['teacher_id'];
+       $teacher = getTeacherById($teacher_id, $conn);
+       $classes = getAllClasses($conn);
+       $students = getAllStudents($conn);
+       $student_grades = getAllGrades($conn);
+?>
+<?php       
 // Ensure the user is logged in as Teacher or Admin
 if ((isset($_SESSION['teacher_id']) && $_SESSION['role'] == 'Teacher') || (isset($_SESSION['admin_id']) && $_SESSION['role'] == 'Admin')) {
     $isTeacher = isset($_SESSION['teacher_id']) && $_SESSION['role'] == 'Teacher';
